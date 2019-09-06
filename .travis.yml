@@ -9,7 +9,6 @@ cache: ccache
 branches:
   except:
   - development-psa
-  - coverity_scan
 
 script:
 - tests/scripts/recursion.pl library/*.c
