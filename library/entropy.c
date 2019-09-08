@@ -119,6 +119,20 @@ void mbedtls_entropy_init( mbedtls_entropy_context *ctx )
 #endif /* MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES */
 }
 
+#ifdef __SWITCH__
+#include "switch/kernel/random.h"
+
+int mbedtls_hardware_poll( void *data, unsigned char *output, size_t len,
+                           size_t *olen ) {
+    randomGet(output, len);
+
+    if (olen)
+        *olen = len;
+
+    return 0;
+}
+#endif
+
 void mbedtls_entropy_free( mbedtls_entropy_context *ctx )
 {
 #if defined(MBEDTLS_HAVEGE_C)

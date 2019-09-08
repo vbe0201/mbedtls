@@ -34,8 +34,8 @@
 
 #if !defined(unix) && !defined(__unix__) && !defined(__unix) && \
     !defined(__APPLE__) && !defined(_WIN32) && !defined(__QNXNTO__) && \
-    !defined(__HAIKU__)
-#error "This module only works on Unix and Windows, see MBEDTLS_NET_C in config.h"
+    !defined(__HAIKU__) && !defined(__SWITCH__)
+#error "This module only works on Unix, Windows and the Switch, see MBEDTLS_NET_C in config.h"
 #endif
 
 #if defined(MBEDTLS_PLATFORM_C)
@@ -408,16 +408,6 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
                 return( MBEDTLS_ERR_NET_BUFFER_TOO_SMALL );
 
             memcpy( client_ip, &addr4->sin_addr.s_addr, *ip_len );
-        }
-        else
-        {
-            struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *) &client_addr;
-            *ip_len = sizeof( addr6->sin6_addr.s6_addr );
-
-            if( buf_size < *ip_len )
-                return( MBEDTLS_ERR_NET_BUFFER_TOO_SMALL );
-
-            memcpy( client_ip, &addr6->sin6_addr.s6_addr, *ip_len);
         }
     }
 
